@@ -1,0 +1,30 @@
+{
+    "name": "Quant-AI-Dev-Environment",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "airflow-scheduler", // 기본적으로 접속할 서비스
+    "workspaceFolder": "/opt/airflow", // 컨테이너 내부 작업 경로
+    
+    // [중요] 컨테이너 안으로 들어가도 자동으로 깔려있어야 할 확장 프로그램들
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",              // 파이썬 필수
+                "ms-python.vscode-pylance",      // 코드 분석 및 자동 완성
+                "njpwerner.autodocstring",       // 시니어급 주석 자동 생성
+                "mtxr.sqltools",                 // VS Code 안에서 DB 바로 보기
+                "mtxr.sqltools-driver-pg"        // Postgres 드라이버
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.analysis.extraPaths": ["/opt/airflow/dags"]
+            }
+        }
+    },
+
+    // 컨테이너가 뜬 후 실행할 명령어 (필요한 라이브러리 자동 설치 등)
+    // "postCreateCommand": "pip install praw pandas yfinance",
+
+    "remoteUser": "airflow"
+}

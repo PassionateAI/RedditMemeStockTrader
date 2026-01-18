@@ -1,0 +1,10 @@
+# requirements-dev.txt (For Local Developer's Laptop)
+
+# 1. 서버용 라이브러리 다 포함
+-r services/airflow/requirements.txt
+
+# 2. 로컬 개발에만 필요한 것 (도커엔 이미 있지만 내 컴엔 없는 것)
+apache-airflow==2.10.3  # VS Code 자동완성을 위해 필요
+pylint                  # 코드 검사 도구
+black                   # 코드 포맷팅 도구
+pytest                  # 테스트 도구

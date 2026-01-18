@@ -1,0 +1,19 @@
+[2026-01-18T05:58:38.016+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: reddit_meme_stock_pipeline.analyze_data manual__2026-01-18T05:58:36.368485+00:00 [queued]>
+[2026-01-18T05:58:38.021+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: reddit_meme_stock_pipeline.analyze_data manual__2026-01-18T05:58:36.368485+00:00 [queued]>
+[2026-01-18T05:58:38.022+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 2
+[2026-01-18T05:58:38.028+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): analyze_data> on 2026-01-18 05:58:36.368485+00:00
+[2026-01-18T05:58:38.032+0000] {standard_task_runner.py:60} INFO - Started process 228 to run task
+[2026-01-18T05:58:38.033+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'reddit_meme_stock_pipeline', 'analyze_data', 'manual__2026-01-18T05:58:36.368485+00:00', '--job-id', '8', '--raw', '--subdir', 'DAGS_FOLDER/reddit_dog.py', '--cfg-path', '/tmp/tmpuqq4d110']
+[2026-01-18T05:58:38.035+0000] {standard_task_runner.py:88} INFO - Job 8: Subtask analyze_data
+[2026-01-18T05:58:38.055+0000] {task_command.py:423} INFO - Running <TaskInstance: reddit_meme_stock_pipeline.analyze_data manual__2026-01-18T05:58:36.368485+00:00 [running]> on host d5bc930e2d13
+[2026-01-18T05:58:38.095+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='reddit_meme_stock_pipeline' AIRFLOW_CTX_TASK_ID='analyze_data' AIRFLOW_CTX_EXECUTION_DATE='2026-01-18T05:58:36.368485+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-01-18T05:58:36.368485+00:00'
+[2026-01-18T05:58:38.100+0000] {reddit_dog.py:109} INFO - Sending 4 posts to AI Brain at http://api-server:8000/analyze...
+[2026-01-18T05:58:40.342+0000] {reddit_dog.py:125} INFO - Analysis Result: {'decision': 'BUY', 'reasoning': "GME 주식은 현재 강한 상슨세를 보이고 있고, 'to the moon'이라는 용어는 높은 상승을 의미하는 용어이므로 매수를 권장합니다.", 'ticker': 'UNKNOWN'}
+[2026-01-18T05:58:42.327+0000] {reddit_dog.py:125} INFO - Analysis Result: {'decision': 'BUY', 'reasoning': 'NVIDIA의 수익 전망이 밝고 인공지능이 미래이기 때문에 주식을 구매하는 것이 좋습니다.', 'ticker': 'UNKNOWN'}
+[2026-01-18T05:58:43.281+0000] {reddit_dog.py:125} INFO - Analysis Result: {'action': 'BUY', 'reasoning': '월가의 우려 없는 용자들은 보통 시장의 반대편에서 성공을 거두곤 합니다. 테슬라의 경우 Elon Musk의 행보가 어느 순간 긍정적으로 반영될 수 있기 때문에 지금은 매수할 때입니다.', 'ticker': 'UNKNOWN'}
+[2026-01-18T05:58:44.418+0000] {reddit_dog.py:125} INFO - Analysis Result: {'decision': 'HOLD', 'reasoning': '애플 비전 프로가 너무 비싸지만 기술은 놀라운 것으로 알려져 있기 때문에 지금은 보유하는 것이 좋습니다. 기술적인 면에서 훌륭한 제품이므로 약간의 가격 하락을 기다려야 합니다.', 'ticker': 'UNKNOWN'}
+[2026-01-18T05:58:44.419+0000] {reddit_dog.py:133} INFO - Total Analysis Completed: 4 items.
+[2026-01-18T05:58:44.419+0000] {python.py:201} INFO - Done. Returned value was: [{'decision': 'BUY', 'reasoning': "GME 주식은 현재 강한 상슨세를 보이고 있고, 'to the moon'이라는 용어는 높은 상승을 의미하는 용어이므로 매수를 권장합니다.", 'ticker': 'UNKNOWN'}, {'decision': 'BUY', 'reasoning': 'NVIDIA의 수익 전망이 밝고 인공지능이 미래이기 때문에 주식을 구매하는 것이 좋습니다.', 'ticker': 'UNKNOWN'}, {'action': 'BUY', 'reasoning': '월가의 우려 없는 용자들은 보통 시장의 반대편에서 성공을 거두곤 합니다. 테슬라의 경우 Elon Musk의 행보가 어느 순간 긍정적으로 반영될 수 있기 때문에 지금은 매수할 때입니다.', 'ticker': 'UNKNOWN'}, {'decision': 'HOLD', 'reasoning': '애플 비전 프로가 너무 비싸지만 기술은 놀라운 것으로 알려져 있기 때문에 지금은 보유하는 것이 좋습니다. 기술적인 면에서 훌륭한 제품이므로 약간의 가격 하락을 기다려야 합니다.', 'ticker': 'UNKNOWN'}]
+[2026-01-18T05:58:44.432+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=reddit_meme_stock_pipeline, task_id=analyze_data, execution_date=20260118T055836, start_date=20260118T055838, end_date=20260118T055844
+[2026-01-18T05:58:44.455+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-01-18T05:58:44.465+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

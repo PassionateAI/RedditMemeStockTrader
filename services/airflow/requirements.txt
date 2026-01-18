@@ -1,0 +1,7 @@
+# services/airflow/requirements.txt (For Docker)
+yfinance
+pandas
+numpy
+requests
+praw
+psycopg2-binary

@@ -1,0 +1,23 @@
+[2026-01-18T07:00:27.400+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-01-18T07:00:27.406+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: real_quant_strategy_v2_documented.fetch_market_data manual__2026-01-18T07:00:26.320173+00:00 [queued]>
+[2026-01-18T07:00:27.410+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: real_quant_strategy_v2_documented.fetch_market_data manual__2026-01-18T07:00:26.320173+00:00 [queued]>
+[2026-01-18T07:00:27.410+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 2
+[2026-01-18T07:00:27.415+0000] {taskinstance.py:2889} INFO - Executing <Task(PythonOperator): fetch_market_data> on 2026-01-18 07:00:26.320173+00:00
+[2026-01-18T07:00:27.419+0000] {standard_task_runner.py:72} INFO - Started process 317 to run task
+[2026-01-18T07:00:27.421+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'real_quant_strategy_v2_documented', 'fetch_market_data', 'manual__2026-01-18T07:00:26.320173+00:00', '--job-id', '21', '--raw', '--subdir', 'DAGS_FOLDER/real_quant_dag.py', '--cfg-path', '/tmp/tmpijtr_gwx']
+[2026-01-18T07:00:27.423+0000] {standard_task_runner.py:105} INFO - Job 21: Subtask fetch_market_data
+[2026-01-18T07:00:27.447+0000] {task_command.py:467} INFO - Running <TaskInstance: real_quant_strategy_v2_documented.fetch_market_data manual__2026-01-18T07:00:26.320173+00:00 [running]> on host 93f07f10e06a
+[2026-01-18T07:00:27.483+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='quant_architect' AIRFLOW_CTX_DAG_ID='real_quant_strategy_v2_documented' AIRFLOW_CTX_TASK_ID='fetch_market_data' AIRFLOW_CTX_EXECUTION_DATE='2026-01-18T07:00:26.320173+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-01-18T07:00:26.320173+00:00'
+[2026-01-18T07:00:27.484+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2026-01-18T07:00:27.490+0000] {real_quant_dag.py:107} INFO - 🚀 Starting Market Data Collection...
+[2026-01-18T07:00:28.763+0000] {real_quant_dag.py:153} INFO - ✅ Processed AAPL: RSI=10.48
+[2026-01-18T07:00:29.088+0000] {real_quant_dag.py:153} INFO - ✅ Processed TSLA: RSI=31.15
+[2026-01-18T07:00:29.569+0000] {real_quant_dag.py:153} INFO - ✅ Processed NVDA: RSI=40.43
+[2026-01-18T07:00:29.939+0000] {real_quant_dag.py:153} INFO - ✅ Processed AMD: RSI=63.95
+[2026-01-18T07:00:30.331+0000] {real_quant_dag.py:153} INFO - ✅ Processed MSFT: RSI=26.23
+[2026-01-18T07:00:30.334+0000] {python.py:240} INFO - Done. Returned value was: [{'ticker': 'AAPL', 'price': 255.53, 'rsi': 10.48, 'technical_signal': 'OVERSOLD (Potential BUY opportunity)', 'news': '- No Title\n- No Title\n- No Title\n'}, {'ticker': 'TSLA', 'price': 437.5, 'rsi': 31.15, 'technical_signal': 'OVERSOLD (Potential BUY opportunity)', 'news': '- No Title\n- No Title\n- No Title\n'}, {'ticker': 'NVDA', 'price': 186.23, 'rsi': 40.43, 'technical_signal': 'NEUTRAL (Wait and see)', 'news': '- No Title\n- No Title\n- No Title\n'}, {'ticker': 'AMD', 'price': 231.83, 'rsi': 63.95, 'technical_signal': 'NEUTRAL (Wait and see)', 'news': '- No Title\n- No Title\n- No Title\n'}, {'ticker': 'MSFT', 'price': 459.86, 'rsi': 26.23, 'technical_signal': 'OVERSOLD (Potential BUY opportunity)', 'news': '- No Title\n- No Title\n- No Title\n'}]
+[2026-01-18T07:00:30.357+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2026-01-18T07:00:30.357+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=real_quant_strategy_v2_documented, task_id=fetch_market_data, run_id=manual__2026-01-18T07:00:26.320173+00:00, execution_date=20260118T070026, start_date=20260118T070027, end_date=20260118T070030
+[2026-01-18T07:00:30.401+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-01-18T07:00:30.458+0000] {taskinstance.py:3895} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-01-18T07:00:30.461+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

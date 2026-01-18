@@ -1,0 +1,8 @@
+fastapi             # The Web Framework (웹 서버 프레임워크)
+uvicorn             # The Server Runner (서버 실행기)
+pydantic            # Data Validation (데이터 검증)
+langchain-openai    # OpenAI Integration (GPT 모델 연동)
+langgraph           # Logic Flow (에이전트 흐름 제어)
+langchain-core      # Core Components (랭체인 핵심 부품)
+python-dotenv       # Environment Variables (.env 파일 읽기)
+openai>=1.0.0  # 👈 추가됨: AI와 대화하기 위한 필수 도구

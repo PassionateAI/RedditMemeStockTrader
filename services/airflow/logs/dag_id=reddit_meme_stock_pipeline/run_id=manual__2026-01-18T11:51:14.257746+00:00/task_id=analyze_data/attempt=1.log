@@ -1,0 +1,23 @@
+[2026-01-18T11:51:15.914+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-01-18T11:51:15.920+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: reddit_meme_stock_pipeline.analyze_data manual__2026-01-18T11:51:14.257746+00:00 [queued]>
+[2026-01-18T11:51:15.923+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: reddit_meme_stock_pipeline.analyze_data manual__2026-01-18T11:51:14.257746+00:00 [queued]>
+[2026-01-18T11:51:15.923+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 2
+[2026-01-18T11:51:15.927+0000] {taskinstance.py:2889} INFO - Executing <Task(PythonOperator): analyze_data> on 2026-01-18 11:51:14.257746+00:00
+[2026-01-18T11:51:15.930+0000] {standard_task_runner.py:72} INFO - Started process 17444 to run task
+[2026-01-18T11:51:15.931+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'reddit_meme_stock_pipeline', 'analyze_data', 'manual__2026-01-18T11:51:14.257746+00:00', '--job-id', '58', '--raw', '--subdir', 'DAGS_FOLDER/reddit_dog.py', '--cfg-path', '/tmp/tmp02_2rgne']
+[2026-01-18T11:51:15.933+0000] {standard_task_runner.py:105} INFO - Job 58: Subtask analyze_data
+[2026-01-18T11:51:15.954+0000] {task_command.py:467} INFO - Running <TaskInstance: reddit_meme_stock_pipeline.analyze_data manual__2026-01-18T11:51:14.257746+00:00 [running]> on host 4cffc33b1875
+[2026-01-18T11:51:15.984+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='reddit_meme_stock_pipeline' AIRFLOW_CTX_TASK_ID='analyze_data' AIRFLOW_CTX_EXECUTION_DATE='2026-01-18T11:51:14.257746+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-01-18T11:51:14.257746+00:00'
+[2026-01-18T11:51:15.985+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2026-01-18T11:51:15.995+0000] {reddit_dog.py:119} INFO - Sending 4 posts to AI Brain at http://api-server:8000/analyze...
+[2026-01-18T11:51:17.752+0000] {reddit_dog.py:135} INFO - Analysis Result: {'decision': 'BUY', 'reasoning': "GME 주식은 이미 많은 관심을 받고 있고, 높은 가격 변동성을 보여주고 있습니다. 현재 'To the Moon'이라는 문구를 사용하면서 긍정적인 감정을 보이고 있어 매수를 권장합니다.", 'ticker': 'UNKNOWN'}
+[2026-01-18T11:51:19.166+0000] {reddit_dog.py:135} INFO - Analysis Result: {'decision': 'BUY', 'reasoning': 'NVIDIA의 수익 전망이 밝고 AI 기술이 미래를 이끌 것으로 예상된다. 이는 주가 상승을 예고하므로 매수를 권장한다.', 'ticker': 'UNKNOWN'}
+[2026-01-18T11:51:21.334+0000] {reddit_dog.py:135} INFO - Analysis Result: {'decision': 'BUY', 'reasoning': '테슬라 주식에 대한 강력한 감정이 이미 반영되어 주가가 하락할 가능성이 있으므로 현재 매수 포지션을 유지하는 것이 유리할 수 있습니다.', 'ticker': 'UNKNOWN'}
+[2026-01-18T11:51:23.794+0000] {reddit_dog.py:135} INFO - Analysis Result: {'action': 'HOLD', 'reasoning': "Apple's Vision Pro being expensive might limit mass adoption initially, but the amazing technology suggests potential future demand. Therefore, holding could be a risk worth taking to see how the market reacts over time.", 'ticker': 'UNKNOWN'}
+[2026-01-18T11:51:23.795+0000] {reddit_dog.py:143} INFO - Total Analysis Completed: 4 items.
+[2026-01-18T11:51:23.796+0000] {python.py:240} INFO - Done. Returned value was: [{'decision': 'BUY', 'reasoning': "GME 주식은 이미 많은 관심을 받고 있고, 높은 가격 변동성을 보여주고 있습니다. 현재 'To the Moon'이라는 문구를 사용하면서 긍정적인 감정을 보이고 있어 매수를 권장합니다.", 'ticker': 'UNKNOWN'}, {'decision': 'BUY', 'reasoning': 'NVIDIA의 수익 전망이 밝고 AI 기술이 미래를 이끌 것으로 예상된다. 이는 주가 상승을 예고하므로 매수를 권장한다.', 'ticker': 'UNKNOWN'}, {'decision': 'BUY', 'reasoning': '테슬라 주식에 대한 강력한 감정이 이미 반영되어 주가가 하락할 가능성이 있으므로 현재 매수 포지션을 유지하는 것이 유리할 수 있습니다.', 'ticker': 'UNKNOWN'}, {'action': 'HOLD', 'reasoning': "Apple's Vision Pro being expensive might limit mass adoption initially, but the amazing technology suggests potential future demand. Therefore, holding could be a risk worth taking to see how the market reacts over time.", 'ticker': 'UNKNOWN'}]
+[2026-01-18T11:51:23.822+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2026-01-18T11:51:23.822+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=reddit_meme_stock_pipeline, task_id=analyze_data, run_id=manual__2026-01-18T11:51:14.257746+00:00, execution_date=20260118T115114, start_date=20260118T115115, end_date=20260118T115123
+[2026-01-18T11:51:23.864+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-01-18T11:51:23.878+0000] {taskinstance.py:3895} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-01-18T11:51:23.879+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

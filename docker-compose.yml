@@ -1,0 +1,179 @@
+version: '3.8' # Specifies the version of the Docker Compose file format.
+
+# ==============================================================================
+# EXTENSION FIELD (x-airflow-common)
+# ==============================================================================
+# This block uses YAML anchors (&) to define common configurations.
+# Instead of repeating the same environment variables for the Webserver, Scheduler,
+# and Init container, we define them here once and reuse them later using aliases (*).
+# This follows the DRY (Don't Repeat Yourself) principle.
+x-airflow-common: &airflow-common
+  # The base image for all Airflow services.
+  # We use a standard Apache Airflow image (version 2.8.1).
+  # image: apache/airflow:2.8.1  <--- 이거 지우거나 주석 처리!
+  build:
+    context: ./services/airflow  # <--- "여기 가서 Dockerfile 보고 만들어라!"
+    dockerfile: Dockerfile
+  
+  # Loads environment variables from the .env file in the root directory.
+  # This is crucial for keeping secrets (like Reddit/OpenAI keys) out of the code.
+  env_file:
+    - .env
+
+  environment:
+    &airflow-common-env
+    # Sets the executor to LocalExecutor.
+    # This allows tasks to run in parallel on the same machine (suitable for single-node setups).
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    
+    # Defines the connection string to the PostgreSQL database.
+    # Format: postgresql+psycopg2://user:password@host/db_name
+    # Note: 'postgres' is the service name defined below, used as the hostname.
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    
+    # Disables loading example DAGs (Clean setup).
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    
+    # Authentication backend settings (Basic Auth).
+    AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
+
+  # Mounts local directories to the container.
+  # This allows us to edit code locally and see changes immediately inside the container.
+  volumes:
+    - ./services/airflow/dags:/opt/airflow/dags       # Maps local DAGs folder to container
+    - ./services/airflow/logs:/opt/airflow/logs       # Maps logs for debugging
+    - ./services/airflow/plugins:/opt/airflow/plugins # Maps custom plugins
+    #- ./services/airflow/requirements.txt:/requirements.txt # For installing extra pip packages
+
+  # Ensures the database is healthy before starting these services.
+  depends_on:
+    &airflow-common-depends-on
+    postgres:
+      condition: service_healthy
+
+# ==============================================================================
+# SERVICES DEFINITION
+# ==============================================================================
+services:
+  
+  # ----------------------------------------------------------------------------
+  # 1. PostgreSQL Database
+  # ----------------------------------------------------------------------------
+  # Airflow needs a backend database to store metadata (task history, variables, connections).
+  postgres:
+    image: postgres:13 # Uses the official PostgreSQL 13 image.
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    
+    # Persists database data. Even if the container is destroyed, data remains in the volume.
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+      
+      # 👇 이 줄이 핵심입니다. 로컬의 SQL 파일을 컨테이너의 초기화 폴더로 매핑합니다.
+      - ./services/postgres/init_sql:/docker-entrypoint-initdb.d
+    
+    # Healthcheck: Periodically checks if the DB is ready to accept connections.
+    # Other services wait for this to be 'healthy' before starting.
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+    ports:
+      - "5433:5432" # Exposes port 5433 for local access (optional). 👇 왼쪽(내 컴퓨터 포트)을 5433으로 바꾸고, 오른쪽(컨테이너 내부)은 5432 그대로 둡니다.
+
+  # ----------------------------------------------------------------------------
+  # 2. Airflow Init (Initialization)
+  # ----------------------------------------------------------------------------
+  # A short-lived container that runs once to set up the database schema 
+  # and create the initial admin user. It stops automatically after finishing.
+  airflow-init:
+    <<: *airflow-common # Inherits settings from the extension block above.    
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_MIGRATE: 'true'          # Runs database migrations
+      _AIRFLOW_WWW_USER_CREATE: 'true'     # Creates a default user
+      _AIRFLOW_WWW_USER_USERNAME: airflow
+      _AIRFLOW_WWW_USER_PASSWORD: airflow
+    command: bash -c "airflow db init && airflow users create --username airflow --password airflow --firstname Peter --lastname Parker --role Admin --email spiderman@superhero.org"
+    # The actual shell command to initialize the DB and create the user.
+    #command: bash -c "pip install -r /requirements.txt && airflow db init && airflow users create --username airflow --password airflow --firstname Peter --lastname Parker --role Admin --email spiderman@superhero.org"
+
+  # ----------------------------------------------------------------------------
+  # 3. Airflow Webserver
+  # ----------------------------------------------------------------------------
+  # The UI interface where we monitor DAGs and check logs.
+  # Accessible at http://localhost:8081
+  airflow-webserver:
+    <<: *airflow-common
+    #command: bash -c "pip install -r /requirements.txt && airflow webserver"
+    command: airflow webserver
+    ports:
+      - "8081:8080" # Maps host port 8081 to container port 8080.
+    env_file:  # 👈 추가: Airflow도 이제 비밀 금고(.env)를 씁니다.
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8081/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully # Waits for init to finish.
+
+  # ----------------------------------------------------------------------------
+  # 4. Airflow Scheduler
+  # ----------------------------------------------------------------------------
+  # The heartbeat of Airflow. It checks when to run tasks and triggers the executor.
+  airflow-scheduler:
+    <<: *airflow-common
+    # command: bash -c "pip install -r /requirements.txt && airflow scheduler"
+    command: airflow scheduler
+    restart: always
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+    env_file:  # 👈 추가: 스케줄러도 알아야 실행하니까 추가.
+      - .env
+
+  # ----------------------------------------------------------------------------
+  # 5. API Server (The AI Brain) - CUSTOM SERVICE
+  # ----------------------------------------------------------------------------
+  # This is our custom microservice built with FastAPI and LangGraph.
+  # It handles the logic for analyzing Reddit data using AI.
+  api-server:
+    # Builds the image from the Dockerfile located in ./services/api-server
+    build: ./services/api-server
+    container_name: meme_brain_api
+    
+    # Exposes port 8000 for local testing (http://localhost:8000/docs)
+    ports:
+      - "8000:8000"
+    
+    # Loads environment variables (OPENAI_API_KEY is needed here).
+    env_file:
+      - .env
+      
+    # Hot-reloading: Maps the local app folder to the container.
+    # Changes to Python code will restart the server instantly.
+    volumes:
+      - ./services/api-server/app:/app/app
+    
+    # Runs the uvicorn server.
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    
+    # Ensures it restarts if it crashes.
+    restart: always
+
+# ==============================================================================
+# VOLUMES DEFINITION
+# ==============================================================================
+volumes:
+  postgres-db-volume: # Named volume for persisting database data.

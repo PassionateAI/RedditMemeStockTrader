@@ -1,0 +1,4 @@
+# .gitignore 파일 맨 아래에 추가
+.env
+.venv
+__pycache__
